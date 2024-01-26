@@ -33,6 +33,7 @@
 
 form input.inputError{
 	border: 1px solid #fa0404;
+	outline: 0;
 }
 
 .msgError {

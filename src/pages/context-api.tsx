@@ -8,30 +8,14 @@
  */
 
 import styles from '@/styles/context-api.module.css';
-import { IToastMessage } from '@/types/toast-message';
+import { useTriggerMsg } from '@/hooks/useTriggerMsg'
 import { ToastMessage } from '@/components/ToastMessage';
+import { useToast } from '@/components/ToastMessage/ToastContext';
 
 export default function ContextApi() {
-	const messages: Array<IToastMessage> = [
-		{
-			id: '1',
-			message: 'Mensagem de sucesso',
-			type: 'success',
-		},
-		{
-			id: '2',
-			message: 'Mensagem de erro',
-			type: 'error',
-		},
-	];
-
-	function handleSuccessButtonClick() {
-		alert('Method: handleSuccessButtonClick not implemented');
-	}
-
-	function handleErrorButtonClick() {
-		alert('Method: handleErrorButtonClick not implemented');
-	}
+	const { handleCloseMessage, messages } = useToast(); 
+	
+	const { handleErrorButtonClick, handleSuccessButtonClick } = useTriggerMsg();
 
 	return (
 		<>
@@ -46,8 +30,8 @@ export default function ContextApi() {
 
 			<div className={styles['toast-container']}>
 				{messages.map((message) => (
-					<ToastMessage key={message.id} content={message} />
-				))}
+          			<ToastMessage key={message.id} content={message} onClose={() => handleCloseMessage(message.id)} />
+        		))}
 			</div>
 		</>
 	);

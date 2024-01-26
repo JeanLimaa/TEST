@@ -16,62 +16,75 @@
  */
 
 import { GetServerSideProps } from 'next/types';
-
 import styles from '@/styles/ciclo-de-vida.module.css';
 import { Counter } from '@/components/Counter';
 import { useEffect, useState } from 'react';
 
 type CicloDeVidaProps = {
-	initialCount: number;
+  initialCount: number;
 };
 
 export default function CicloDeVida({ initialCount }: CicloDeVidaProps) {
-	const [showCounter, setShowCounter] = useState(false);
-	const [count, setCount] = useState(0);
+  const [showCounter, setShowCounter] = useState(false);
 
-	function handleOcultCounterClick() {
-		setShowCounter((prevState) => !prevState);
-	}
+  function handleOcultCounterClick() {
+    setShowCounter((prevState) => !prevState);
+  }
 
-	useEffect(() => {
-		window.addEventListener('onCounterMount', (event: CustomEventInit) => {
-			console.log('onCounterMount');
-		});
+  useEffect(() => {
+    const handleCounterMount = () => {
+      console.log('onCounterMount');
+    };
 
-		window.addEventListener('onCounterUnmount', (event: CustomEventInit) => {
-			console.log('onCounterUnmount');
-		});
+    const handleCounterUnmount = () => {
+      console.log('onCounterUnmount');
+    };
 
-		window.addEventListener('onCounterUpdate', (event: CustomEventInit) => {
-			console.log('onCounterUpdate');
-		});
-	}, []);
+    const handleCounterUpdate = (event: CustomEventInit) => {
+      console.log('onCounterUpdate', event.detail.value);
+      
+      if (event.detail.value >= 10) {
+        setShowCounter(false);
+      }
+    };
 
-	return (
-		<div className={styles.container}>
-			<div>
-				<button type="button" onClick={handleOcultCounterClick}>
-					{showCounter ? 'Ocultar contador' : 'Mostrar contador'}
-				</button>
+    window.addEventListener('onCounterMount', handleCounterMount);
+    window.addEventListener('onCounterUnmount', handleCounterUnmount);
+    window.addEventListener('onCounterUpdate', handleCounterUpdate);
 
-				{showCounter && (
-					<>
-						<h1>Exemplo de Ciclo de vida</h1>
+    // Limpeza dos ouvintes de eventos ao desmontar o componente
+    return () => {
+      window.removeEventListener('onCounterMount', handleCounterMount);
+      window.removeEventListener('onCounterUnmount', handleCounterUnmount);
+      window.removeEventListener('onCounterUpdate', handleCounterUpdate);
+    };
+  }, []);
 
-						<div data-content>
-							<Counter initialCount={initialCount} />
-						</div>
-					</>
-				)}
-			</div>
-		</div>
-	);
+  return (
+    <div className={styles.container}>
+      <div>
+        <button type="button" onClick={handleOcultCounterClick}>
+          {showCounter ? 'Ocultar contador' : 'Mostrar contador'}
+        </button>
+
+        {showCounter && (
+          <>
+            <h1>Exemplo de Ciclo de vida</h1>
+
+            <div data-content>
+              <Counter initialCount={initialCount} />
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps<CicloDeVidaProps> = async () => {
-	return {
-		props: {
-			initialCount: 0,
-		},
-	};
+  return {
+    props: {
+      initialCount: 0,
+    },
+  };
 };

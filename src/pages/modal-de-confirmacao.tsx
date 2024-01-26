@@ -9,7 +9,6 @@
  */
 
 import { useState } from 'react';
-import Head from 'next/head';
 
 import styles from '@/styles/modal.module.css';
 import { Modal } from '@/components/Modal';
@@ -19,7 +18,7 @@ export default function Home() {
 	const [confirmText, setConfirmText] = useState(false);
 
  	function handleConfirmation(ev: any){ //falta por o tipo
-		let inputText = ev.target.value.toUpperCase();
+		let inputText = ev.target.value; //.toUpperCase() -- tirei para ser obrigatorio maiusculas
 		setConfirmText(inputText === 'SIM');
 	}
  
@@ -30,9 +29,13 @@ export default function Home() {
 
 	function renderModalContent() {
 		return(
-			<div onClick={e => e.stopPropagation()}>
+			<div onClick={e => e.stopPropagation()} className={styles['modal-confirm']}>
 				<h5>Para confirmar, digite "SIM" na caixa abaixo.</h5>
-				<input type="text" onChange={handleConfirmation}/>
+				<input 
+					type="text" 
+					onChange={handleConfirmation} 
+					className={`${styles["input-modal-confirm"]} ${confirmText && styles["input-modal-confirm-ok"]}`} 
+				/>
 			</div>
 		)
 	}

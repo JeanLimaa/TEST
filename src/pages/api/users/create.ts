@@ -28,12 +28,23 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).json({ error: "Corpo da requisição inválido" });
   }
 
-  // Adiciona o usuário ao array
   const email: string = body.email;
-  const name: string = body.name;
-  const length = users.length;
-  let id: number = length > 0 ? users[length - 1].id + 1 : 1; //pega o ultimo index e add + 1
+  let userExists: boolean = false;
 
+  users.map(user => {
+    userExists = user.email === email; //verifica se o email já existe no Array;
+  })
+
+  if(userExists) {
+    // Retorna que o e-mail ja está cadastrado
+    return res.status(500).json({error: 'E-mail já cadastrado.'});
+  }
+
+  const name: string = body.name;
+  const length: number = users.length;
+  let id: number = length > 0 ? users[length - 1].id + 1 : 1; //pega o ultimo index e add + 1
+  
+  // Adiciona o usuário ao array
   const user: IUser = {
     id: id,
     email,

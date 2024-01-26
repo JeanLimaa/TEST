@@ -1,19 +1,18 @@
-import { useState } from 'react';
-
 import { IToastMessage } from '@/types/toast-message.d';
 
 import styles from './style.module.css';
 
 type ToastMessageProps = {
 	content: IToastMessage;
+	onClose: () => void;
 };
 
-export const ToastMessage: React.FC<ToastMessageProps> = ({ content: data }) => {
+export const ToastMessage: React.FC<ToastMessageProps> = ({ content: data, onClose }) => {
 	return (
 		<div className={styles.container} data-toast-type={data.type} data-toast-id={data.id}>
 			<span data-content>{data.message}</span>
 
-			<span data-close>╳</span>
+			<span data-close onClick={onClose}>╳</span>
 		</div>
 	);
 };
