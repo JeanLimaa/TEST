@@ -10,12 +10,39 @@
  * - Você deve corrigir a interface IUserCreate em src/types/user.d.ts
  */
 
-import { NextApiRequest, NextApiResponse } from 'next/types';
+import { NextApiRequest, NextApiResponse } from "next/types";
 
-import { IUser, IUserCreate } from '@/types/user.d';
+import { IUser, IUserCreate } from "@/types/user.d";
 
 const users: IUser[] = [];
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
-	return res.status(400).json(undefined);
+  // Valida o método da request
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Método não permitido" });
+  }
+
+  // Valida o body da request
+  const body: IUserCreate = req.body;
+  if (!body) {
+    return res.status(400).json({ error: "Corpo da requisição inválido" });
+  }
+
+  // Adiciona o usuário ao array
+  const email: string = body.email;
+  const name: string = body.name;
+  const length = users.length;
+  let id: number = length > 0 ? users[length - 1].id + 1 : 1; //pega o ultimo index e add + 1
+
+  const user: IUser = {
+    id: id,
+    email,
+    name,
+  };
+  users.push(user);
+
+  console.log(user);
+
+  // Retorna o usuário criado
+  return res.status(201).json(user);
 };

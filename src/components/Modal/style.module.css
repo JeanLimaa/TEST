@@ -67,7 +67,7 @@
 }
 
 .wrapper [data-modal-container] [data-modal-footer] button[data-type='confirm'] {
-	background-color: #4caf50;
+	/* background-color: #4caf50; */
 	color: #ffffff;
 	border: none;
 }

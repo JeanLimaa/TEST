@@ -14,8 +14,29 @@ import { NextApiRequest, NextApiResponse } from 'next/types';
 
 import { IUser } from '@/types/user.d';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-	const users: Array<unknown> = [];
+//import { ApiMethod } from '@/decorators/method';
 
-	return res.status(500).json(users);
+export default (req: NextApiRequest, res: NextApiResponse) => {
+	const users: Array<IUser> = [];
+
+	if(req.method === 'GET')
+	{
+		users.push(
+			{
+				id: 1,
+				name: 'Jean',
+				email: 'jeansantoslima17@gmail.com'
+			},
+			{
+				id: 2,
+				name: 'Glaucia',
+				email: 'glaucia@gmail.com'
+			}
+		)
+	} else {
+		// return res.status(500).json({ok: false, message: O método precisa ser GET.'});
+		throw new Error('O método precisa ser GET.');
+	}
+
+	return res.status(200).json(users); //código alterado para ok
 };

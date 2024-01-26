@@ -16,6 +16,26 @@ import { Modal } from '@/components/Modal';
 
 export default function Home() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
+	const [confirmText, setConfirmText] = useState(false);
+
+ 	function handleConfirmation(ev: any){ //falta por o tipo
+		let inputText = ev.target.value.toUpperCase();
+		setConfirmText(inputText === 'SIM');
+	}
+ 
+	function handleModalConfirm(){
+		alert("Confirmado!");
+		setConfirmText(false); //resetar setConfirmText
+	}
+
+	function renderModalContent() {
+		return(
+			<div onClick={e => e.stopPropagation()}>
+				<h5>Para confirmar, digite "SIM" na caixa abaixo.</h5>
+				<input type="text" onChange={handleConfirmation}/>
+			</div>
+		)
+	}
 
 	return (
 		<>
@@ -26,6 +46,16 @@ export default function Home() {
 			</main>
 
 			{/* Renderizar modal de confirmação */}
+			<Modal 
+				isOpen={modalIsOpen}
+				onClose={() => setModalIsOpen(false)}
+				onConfirm={handleModalConfirm}
+				title='Confirmação'
+				footer={{confirmText: 'Confirmar'}}
+				disabledBtn={!confirmText} //é necessário inverter, pois se disabled === true, o botão é desativado
+			>
+				{renderModalContent()}
+			</Modal>
 		</>
 	);
 }

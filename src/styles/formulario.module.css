@@ -30,3 +30,19 @@
 	width: 50%;
 	margin-left: auto;
 }
+
+form input.inputError{
+	border: 1px solid #fa0404;
+}
+
+.msgError {
+	color: #fa0404;
+	font-size: 11px;
+	padding-left: 0.3rem;
+}
+
+div.box {
+	width: 100%;
+	display: inherit;
+	flex-direction: inherit;
+}

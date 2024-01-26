@@ -17,6 +17,7 @@ export default ApiMethod('GET')(async (req: NextApiRequest, res: NextApiResponse
 		cities.push({
 			id: faker.string.uuid(),
 			name: faker.location.city(),
+			date: new Date()
 		});
 	}
 

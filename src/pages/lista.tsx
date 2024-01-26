@@ -13,6 +13,7 @@ import { IUser } from '@/types/user';
 
 export default function Lista() {
 	const [users, setUsers] = useState<Array<IUser>>([]);
+	const [error, setError] = useState(''); //estado para caso haja erro na chamada
 
 	async function getUsersList() {
 		try {
@@ -20,9 +21,10 @@ export default function Lista() {
 			const data = await response.json();
 
 			if (!response.ok) throw new Error('Erro ao obter os dados');
-
+			
 			setUsers(data);
 		} catch (error) {
+			setError('Erro ao obter os usuários. Por favor, recarregue a página.');
 			console.error(error);
 		}
 	}
@@ -37,8 +39,11 @@ export default function Lista() {
 				<h2>Lista de usuários</h2>
 
 				<div data-list-container>
-					{/* Exemplo */}
-					<div data-list-item>ID 323 - Usuário 323 (user-323@mail.com)</div>
+					{error && <div data-error>{error}</div>}
+
+					{users.map((user) => (
+						<div data-list-item key={user.id}>ID {user.id} - {user.name} ({user.email})</div>
+					))}
 				</div>
 			</div>
 		</div>

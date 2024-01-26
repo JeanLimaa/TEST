@@ -11,6 +11,8 @@ type ModalProps = {
 		confirmText?: string;
 		cancelText?: string;
 	};
+	//prop para desativar o botão caso ainda nao tenha confirmado
+	disabledBtn?: boolean;
 };
 
 /* 
@@ -20,25 +22,26 @@ type ModalProps = {
 */
 
 export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props }) => {
+
 	function handleCloseClick(e: React.MouseEvent) {
-		props.onClose?.('click', e.target);
-	}
+		  props.onClose?.('click', e.target);
+	  }
 
 	function handleConfirmClick(e: React.MouseEvent) {
 		props.onConfirm?.();
 	}
 
-	function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+ 	function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
 		if (e.key === 'Escape') props.onClose?.('esc', e.target);
-	}
+	} 
 
 	if (!isOpen) return null;
 
 	return (
-		<div data-modal-wrapper className={styles.wrapper} onClick={handleCloseClick} onKeyDown={handleKeyDown}>
+		<div data-modal-wrapper className={styles.wrapper} onKeyDown={handleKeyDown} onClick={handleCloseClick}> {/*  */} 
 			<div data-modal-container>
 				<header data-modal-header>
-					<h2>{title}</h2>
+					<h2 onClick={(e: React.MouseEvent) => e.stopPropagation()}>{title}</h2>
 
 					<button data-modal-close onClick={handleCloseClick}>
 						X
@@ -53,7 +56,12 @@ export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props 
 							{props.footer?.cancelText ?? 'Cancelar'}
 						</button>
 
-						<button data-modal-confirm onClick={handleConfirmClick} data-type="confirm">
+						<button 
+							data-modal-confirm onClick={handleConfirmClick} 
+							data-type="confirm" 
+							disabled={props.disabledBtn ?? false} //só desativa se receber a props
+							style={props.disabledBtn ? {backgroundColor: '#a5d391', cursor: 'not-allowed'} : {}} //caso esteja desativo mudar a cor e o cursor para indicar estar desabilitado
+						>
 							{props.footer?.confirmText ?? 'Confirmar'}
 						</button>
 					</div>

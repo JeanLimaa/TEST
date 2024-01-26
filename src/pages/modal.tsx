@@ -4,6 +4,9 @@
  * - O modal fecha ao clicar em qualquer elemento, resolva o problema
  */
 
+//o problema é que ao clicar no wrapper, o efeito era propagado a todos elementos. 
+//um simples stopPropagation() resolve.
+
 import { useState } from 'react';
 
 import styles from '@/styles/modal.module.css';
@@ -24,7 +27,7 @@ export default function Home() {
 	function renderModalContent() {
 		return (
 			<div data-modal-content className={styles['modal-form']}>
-				<form onSubmit={() => false}>
+				<form onSubmit={() => false} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
 					<div>
 						<label htmlFor="input-name">Nome</label>
 						<input type="text" id="input-name" placeholder="Insira um nome" />

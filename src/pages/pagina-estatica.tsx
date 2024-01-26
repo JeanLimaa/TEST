@@ -7,49 +7,55 @@
  * - A página deve ser atualizada a cada 1 minuto
  */
 
-import { useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 
 import styles from '@/styles/lista.module.css';
 import { ICity } from '@/types/city.d';
+import { GetStaticProps, NextPage } from 'next';
 
-export default function Lista() {
-	const [list, setUsers] = useState<Array<ICity>>([
-		{
-			id: new Date().getTime().toString(),
-			name: 'São Paulo',
-		},
-	]);
+interface DateProps {
+	children?: ReactNode,
+	data?: ICity[]
+}
 
-	async function getList() {
-		try {
-			const response = await fetch('/api/cities/10');
-			const data = await response.json();
+export const getStaticProps: GetStaticProps = async () => {
+ 	/* try { */
+		const response = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/api/cities/10`)//.then(res => res.json());
+		const data = await response.json();
 
-			if (!response.ok) throw new Error('Erro ao obter os dados');
+		if (!response.ok) throw new Error('Erro ao obter os dados');
 
-			setUsers(data);
-		} catch (error) {
-			console.error(error);
+		return {
+			props: {
+				data
+			},
+			revalidate: 60
 		}
-	}
+/* 	} catch (error) {
+		console.error(error);
+		return {
+			props: {},
+	 	};
+	}  */
+}
 
-	useEffect(() => {
-		getList();
-	}, []);
-
+const Static: NextPage<DateProps> = (props) => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.content}>
 				<h2>Lista de cidades</h2>
 
 				<div data-list-container>
-					{list.map((city) => (
-						<div data-list-item key={city.id}>
-							{city.name}
+					{props.data?.map((city) => (
+						<div key={city.id}>
+							{city.name} - {city?.date.toLocaleString()}
 						</div>
 					))}
+					{/* <h2>{props.data?.name} - {props.data?.date?.toLocaleString()}</h2>  */}
 				</div>
 			</div>
 		</div>
 	);
 }
+
+export default Static
