@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "São Paulo"
+    },
+    {
+        "id": 2,
+        "name": "Rio de Janeiro"
+    },
+    {
+        "id": 3,
+        "name": "Belo Horizonte"
+    },
+    {
+        "id": 4,
+        "name": "Brasília"
+    },
+    {
+        "id": 5,
+        "name": "Salvador"
+    },
+    {
+        "id": 6,
+        "name": "Fortaleza"
+    },
+    {
+        "id": 7,
+        "name": "Recife"
+    },
+    {
+        "id": 8,
+        "name": "Curitiba"
+    },
+    {
+        "id": 9,
+        "name": "Manaus"
+    },
+    {
+        "id": 10,
+        "name": "Porto Alegre"
+    }
+]

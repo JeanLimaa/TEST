@@ -6,55 +6,52 @@
  * - A página deve ser gerada no momento da build
  * - A página deve ser atualizada a cada 1 minuto
  */
-
-import { ReactNode, useEffect, useState } from 'react';
-
 import styles from '@/styles/lista.module.css';
 import { GetStaticProps, NextPage } from 'next/types';
 import { ICity } from '@/types/city.d';
+import citiesDb from '@/utils/citiesDb.json'; //db com algumas cidades, para caso de erro na chamada da API no instante de build.
 
-interface DataProps {
-	children?: ReactNode,
-	data?: ICity[]
+interface ListaProps {
+	list: ICity[];
 }
 
-const apiurl = process.env.NEXT_PUBLIC_APIURL;
-
-export const getStaticProps: GetStaticProps = async () => {
-	try { 
-	  const response = await fetch(`${apiurl}/api/cities/10`)//.then(res => res.json());
-
-	  if (!response.ok) throw new Error('Erro ao obter os dados');
-	  
-	  const data = await response.json();
-
-	  return {
-		  props: { data },
-		  revalidate: 60
-	  }
-   } catch (error) {
-	  console.error(error);
-	  return {
-		  props: {},
-	   };
-  }  
-}
-
-const Lista: NextPage<DataProps> = (props) => {
+const Lista: NextPage<ListaProps> = ({ list }) => {
 	return (
-		<div className={styles.container}>
-			<div className={styles.content}>
-				<h2>Lista de cidades</h2>
-				<div data-list-container>
-					{props.data?.map((city) => (
-						<div key={city.id}>
-							{city.name} - {city?.date.toLocaleString()}
-						</div>
-					))}
-				</div>
-			</div>
+	  <div className={styles.container}>
+		<div className={styles.content}>
+		  <h2>Lista de cidades</h2>
+		  <div data-list-container>
+			{list.map((city) => (
+			  <div data-list-item key={city.id}>
+				{city.name}
+			  </div>
+			))}
+		  </div>
 		</div>
+	  </div>
 	);
-}
+};
+
+export const getStaticProps: GetStaticProps<ListaProps> = async () => {
+	try {	
+	  const response = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/api/cities/10`);
+	  if (!response.ok) {
+		throw new Error('Erro ao obter os dados');
+	  }
+	  const data = await response.json();
+  
+	  return {
+		props: { list: data },
+		revalidate: 60, // Revalida a cada 60 segundos (1 minuto)
+	  };
+	} catch (error) {
+	  console.error(error);
+
+	  return {
+		props: { list: citiesDb }, // retorna uma base com 10 cidades - para o caso de dar erro - podendo aguardar a proxima revalidação pra chamada da API
+		revalidate: 60, //revalidar em caso de erro. Atualizando em seguida com os dados da API
+	  };
+	}
+};
 
 export default Lista;

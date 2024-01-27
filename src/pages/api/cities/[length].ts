@@ -16,8 +16,7 @@ export default ApiMethod('GET')(async (req: NextApiRequest, res: NextApiResponse
 	for (const _ of loop(length)) {
 		cities.push({
 			id: faker.string.uuid(),
-			name: faker.location.city(),
-			date: new Date()
+			name: faker.location.city()
 		});
 	}
 

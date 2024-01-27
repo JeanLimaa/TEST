@@ -29,11 +29,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const email: string = body.email;
-  let userExists: boolean = false;
-
-  users.map(user => {
-    userExists = user.email === email; //verifica se o email já existe no Array;
-  })
+  let userExists: boolean = users.some(user => user.email === email);
 
   if(userExists) {
     // Retorna que o e-mail ja está cadastrado
