@@ -17,14 +17,14 @@ export default function Home() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [confirmText, setConfirmText] = useState(false);
 
- 	function handleConfirmation(ev: any){ //falta por o tipo
+ 	function handleConfirmation(ev: React.ChangeEvent<HTMLInputElement>){
 		let inputText = ev.target.value; //.toUpperCase() -- tirei para ser obrigatorio maiusculas
-		setConfirmText(inputText === 'SIM');
+		setConfirmText(inputText === 'SIM'); //Confirma se o texto digitado é igual a SIM
 	}
  
 	function handleModalConfirm(){
 		alert("Confirmado!");
-		setConfirmText(false); //resetar setConfirmText
+		setConfirmText(false); //resetar setConfirmText após confirmação
 	}
 
 	function renderModalContent() {

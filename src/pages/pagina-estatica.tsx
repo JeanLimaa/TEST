@@ -15,6 +15,7 @@ interface ListaProps {
 	list: ICity[];
 }
 
+//renderiza as cidades obtidas da API
 const Lista: NextPage<ListaProps> = ({ list }) => {
 	return (
 	  <div className={styles.container}>
@@ -53,5 +54,6 @@ export const getStaticProps: GetStaticProps<ListaProps> = async () => {
 	  };
 	}
 };
+
 
 export default Lista;

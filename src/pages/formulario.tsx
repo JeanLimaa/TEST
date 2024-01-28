@@ -13,6 +13,10 @@ type Inputs = {
 	email: string
 }
 
+interface ApiError {
+	error: string;
+}
+
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import styles from '@/styles/formulario.module.css';
@@ -40,8 +44,14 @@ export default function Form() {
 			}
 
 			alert('Usuário criado com sucesso!');
-		} catch (error: any) {
-			alert(`Erro ao criar usuário: ${error.message}`);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				alert(`Erro ao criar usuário: ${error.message}`);
+			  } else {
+				// Se for um erro desconhecido
+				alert(`Erro desconhecido ao criar usuário`);
+				console.error(error);
+			  }
 		}
 	}
 

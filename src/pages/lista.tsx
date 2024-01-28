@@ -14,6 +14,7 @@ import { IUser } from '@/types/user';
 export default function Lista() {
 	const [users, setUsers] = useState<Array<IUser>>([]);
 	const [error, setError] = useState(''); //estado para caso haja erro na chamada
+	const [loading, setLoading] = useState(true); //loading para aguardar o carregamento da API
 
 	async function getUsersList() {
 		try {
@@ -23,8 +24,10 @@ export default function Lista() {
 			if (!response.ok) throw new Error('Erro ao obter os dados');
 			
 			setUsers(data);
+			setLoading(false);
 		} catch (error) {
 			setError('Erro ao obter os usuários. Por favor, recarregue a página.');
+			setLoading(false);
 			console.error(error);
 		}
 	}
@@ -40,7 +43,7 @@ export default function Lista() {
 
 				<div data-list-container>
 					{error && <div data-error>{error}</div>}
-
+					{loading && <div data-loading>Carregando...</div>}
 					{users.map((user) => (
 						<div data-list-item key={user.id}>ID {user.id} - {user.name} ({user.email})</div>
 					))}
